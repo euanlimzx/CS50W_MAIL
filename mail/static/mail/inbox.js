@@ -41,37 +41,44 @@ function load_mailbox(mailbox) {
       // Print emails
       console.log(emails);
       // ... do something else with emails ...
-      //for each emails
-      //create a div and append data to it 
-      var div = document.createElement('div');
-      div.innerHTML=<h1>//body placeholder</h1>;
-      document.getElementById('emails-view').appendChild(div);
+      emails.forEach(list_email);
+      //create a div and append data to it   
+  })
+}
 
+//displaying a list of who the email is from, what the subject line is, and the timestamp of the email.
+function list_email(email){
+  //console.log(email);
+  const mail = document.createElement('div');
+  console.log(email.read);
+  if (email.read===true){
+    var mailhtml=`
+      <div class="card bg-light">
+      <div class="card-body">
+        <h5 class="card-title">${email.subject}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">${email.sender}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">${email.timestamp}</h6>
+      </div>
+    </div>
+      `;
+  } else {
+    var mailhtml=`
+      <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">${email.subject}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">${email.sender}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">${email.timestamp}</h6>
+      </div>
+    </div>
+      `;
+  }
+  
 
-
-  });
+  mail.insertAdjacentHTML('afterbegin',mailhtml);
+  document.querySelector('#emails-view').appendChild(mail);
 }
 
 function send_email(){
-  const recipient= document.querySelector('#compose-recepients').value;
-  const subject= document.querySelector('#compose-subject').value;
-  const body= document.querySelector('#compose-body').value;
-    fetch('/emails', {
-      method: 'POST',
-      body: JSON.stringify({
-          recipients: recipient,
-          subject: subject,
-          body: body
-      })
-    })
-    .then(response => response.json())
-    .then(result => {
-        // Print result
-        console.log(result);
-    });
-  }
-
-  function send_email(){
     const recipient= document.querySelector('#compose-recipients').value;
     const subject= document.querySelector('#compose-subject').value;
     const body= document.querySelector('#compose-body').value;
