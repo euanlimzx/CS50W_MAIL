@@ -27,6 +27,24 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+function compose_reply(replymail){
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#indiv-email').style.display = 'none';
+
+  document.querySelector('#compose-recipients').value = `${replymail.sender}`;
+  if (`${replymail.subject}`.includes("RE")){
+    document.querySelector('#compose-subject').value = `${replymail.subject}`;
+  } else {
+    document.querySelector('#compose-subject').value = `RE:${replymail.subject}`;
+  }
+  document.querySelector('#compose-body').value = `
+  
+
+On ${replymail.timestamp}, ${replymail.sender} wrote :${replymail.body}
+  `;
+}
+
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
@@ -103,7 +121,7 @@ function list_email(email){
         <h6 class="card-subtitle mb-2 text-muted">${indivemail.timestamp}</h6>
         <hr>
         <p class="card-text">${indivemail.body}</p>
-        <a href="#" class="btn btn-light">Reply</a>
+        <a id="reply" class="btn btn-light">Reply</a>
         <a id="unarchive" class="btn btn-light">Unarchive</a>
       </div>
     </div>
@@ -119,7 +137,7 @@ function list_email(email){
       <h6 class="card-subtitle mb-2 text-muted">${indivemail.timestamp}</h6>
       <hr>
       <p class="card-text">${indivemail.body}</p>
-      <a href="#" class="btn btn-light">Reply</a>
+      <a id="reply" class="btn btn-light">Reply</a>
       <a id="archive" class="btn btn-light">Archive</a>
     </div>
   </div>
@@ -136,6 +154,11 @@ function list_email(email){
       body: JSON.stringify({
           read: true
       })
+    })
+    //reply button
+    const replybutton=document.querySelector('#reply');
+    replybutton.addEventListener('click',function(){
+      compose_reply(indivemail);
     })
 
     //archive and unarchive buttons
